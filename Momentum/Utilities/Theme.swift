@@ -6,31 +6,31 @@
 //  Created by Oved Ramirez on 11/21/25.
 //
 
-import SwiftUI
 import UIKit
+import SwiftUI
 
 struct Theme {
     
     // MARK: - Colors
     
     struct Colors {
-        // Primary brand colors
-        static let primary   = Color("Primary")
-               static let secondary = Color("Secondary")
-               static let accent    = Color("Accent")
+        // Primary brand colors - Vibrant and high contrast
+        static let primary = Color(red: 0.0, green: 0.48, blue: 1.0) // Bright blue
+        static let secondary = Color(red: 0.55, green: 0.27, blue: 0.91) // Purple
+        static let accent = Color(red: 1.0, green: 0.35, blue: 0.0) // Orange
         
         // Semantic colors
-        static let success = Color.green
-        static let warning = Color.orange
-        static let error = Color.red
-        static let info = Color.blue
+        static let success = Color(red: 0.2, green: 0.78, blue: 0.35) // Green
+        static let warning = Color(red: 1.0, green: 0.58, blue: 0.0) // Orange
+        static let error = Color(red: 1.0, green: 0.23, blue: 0.19) // Red
+        static let info = Color(red: 0.0, green: 0.48, blue: 1.0) // Blue
         
-        // Background colors
+        // Background colors (adapts to dark/light mode)
         static let background = Color(uiColor: .systemBackground)
         static let secondaryBackground = Color(uiColor: .secondarySystemBackground)
         static let tertiaryBackground = Color(uiColor: .tertiarySystemBackground)
         
-        // Text colors
+        // Text colors (adapts to dark/light mode)
         static let text = Color(uiColor: .label)
         static let secondaryText = Color(uiColor: .secondaryLabel)
         static let tertiaryText = Color(uiColor: .tertiaryLabel)
@@ -40,22 +40,22 @@ struct Theme {
         static let cardBorder = Color(uiColor: .separator)
         
         // Category colors (for tasks, workouts, etc.)
-        static let fitness = Color.blue
-        static let nutrition = Color.green
-        static let wellness = Color.pink
-        static let hydration = Color.cyan
-        static let sleep = Color.purple
-        static let mindfulness = Color.indigo
+        static let fitness = Color(red: 0.0, green: 0.48, blue: 1.0) // Blue
+        static let nutrition = Color(red: 0.2, green: 0.78, blue: 0.35) // Green
+        static let wellness = Color(red: 1.0, green: 0.18, blue: 0.33) // Pink
+        static let hydration = Color(red: 0.0, green: 0.78, blue: 0.75) // Cyan
+        static let sleep = Color(red: 0.55, green: 0.27, blue: 0.91) // Purple
+        static let mindfulness = Color(red: 0.35, green: 0.34, blue: 0.84) // Indigo
         
         // Workout type colors
-        static let strength = Color.red
-        static let cardio = Color.orange
-        static let yoga = Color.purple
-        static let hiit = Color.pink
+        static let strength = Color(red: 1.0, green: 0.23, blue: 0.19) // Red
+        static let cardio = Color(red: 1.0, green: 0.35, blue: 0.0) // Orange
+        static let yoga = Color(red: 0.55, green: 0.27, blue: 0.91) // Purple
+        static let hiit = Color(red: 1.0, green: 0.18, blue: 0.33) // Pink
         
         // Streak colors
-        static let streakFire = Color.orange
-        static let streakGold = Color.yellow
+        static let streakFire = Color(red: 1.0, green: 0.35, blue: 0.0) // Orange
+        static let streakGold = Color(red: 1.0, green: 0.8, blue: 0.0) // Gold
     }
     
     // MARK: - Typography
@@ -189,19 +189,26 @@ extension View {
             )
     }
     
-    // Primary button styling
+    // Primary button styling - NOW WITH VIBRANT BLUE
     func primaryButtonStyle() -> some View {
         self
             .frame(maxWidth: .infinity)
             .frame(height: Theme.Sizes.buttonHeight)
-            .background(Theme.Colors.primary)
+            .background(
+                LinearGradient(
+                    colors: [Theme.Colors.primary, Theme.Colors.primary.opacity(0.8)],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
             .foregroundColor(.white)
+            .fontWeight(.semibold)
             .cornerRadius(Theme.CornerRadius.md)
             .shadow(
-                color: Theme.Shadows.button.color,
-                radius: Theme.Shadows.button.radius,
-                x: Theme.Shadows.button.x,
-                y: Theme.Shadows.button.y
+                color: Theme.Colors.primary.opacity(0.3),
+                radius: 8,
+                x: 0,
+                y: 4
             )
     }
     
@@ -210,9 +217,14 @@ extension View {
         self
             .frame(maxWidth: .infinity)
             .frame(height: Theme.Sizes.buttonHeight)
-            .background(Theme.Colors.secondaryBackground)
+            .background(Theme.Colors.cardBackground)
             .foregroundColor(Theme.Colors.primary)
+            .fontWeight(.semibold)
             .cornerRadius(Theme.CornerRadius.md)
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.CornerRadius.md)
+                    .stroke(Theme.Colors.primary.opacity(0.3), lineWidth: 1.5)
+            )
     }
     
     // Section styling

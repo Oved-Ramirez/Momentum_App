@@ -6,61 +6,61 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+        Group {
+            if hasCompletedOnboarding {
+                // Main app (will build in Phase 3+)
+                MainTabView()
+            } else {
+                // Show onboarding
+                OnboardingContainerView()
             }
         }
     }
 }
 
+// Temporary placeholder for main app
+struct MainTabView: View {
+    var body: some View {
+        TabView {
+            // Dashboard tab
+            Text("Dashboard")
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
+                }
+            
+            // Fitness tab
+            Text("Fitness")
+                .tabItem {
+                    Label("Fitness", systemImage: "dumbbell.fill")
+                }
+            
+            // Cardio tab
+            Text("Cardio")
+                .tabItem {
+                    Label("Cardio", systemImage: "figure.run")
+                }
+            
+            // Meals tab
+            Text("Meals")
+                .tabItem {
+                    Label("Meals", systemImage: "fork.knife")
+                }
+            
+            // Profile tab
+            Text("Profile")
+                .tabItem {
+                    Label("Profile", systemImage: "person.fill")
+                }
+        }
+        .tint(Theme.Colors.primary)
+    }
+}
+
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
