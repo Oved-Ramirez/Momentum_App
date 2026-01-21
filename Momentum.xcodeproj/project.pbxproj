@@ -246,6 +246,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Momentum/Momentum.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2EN6FDQL2G;
@@ -254,6 +255,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Momentum would like to save workout data to your Health app.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "  Momentum needs permission to save workout data to your Health app.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Momentum uses your location to map your cardio workout routes.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Momentum uses motion data to track your activity and workouts";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -290,6 +295,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Momentum/Momentum.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2EN6FDQL2G;
@@ -298,6 +304,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Momentum would like to save workout data to your Health app.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "  Momentum needs permission to save workout data to your Health app.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Momentum uses your location to map your cardio workout routes.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Momentum uses motion data to track your activity and workouts";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

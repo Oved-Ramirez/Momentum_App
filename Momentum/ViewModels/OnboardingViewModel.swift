@@ -42,9 +42,11 @@ final class OnboardingViewModel {
     // MARK: - Dependencies
     
     private let dataStore: DataStore
+    private let healthKitManager: HealthKitManager
     
-    init(dataStore: DataStore = .shared) {
+    init(dataStore: DataStore = .shared, healthKitManager: HealthKitManager = .shared) {
         self.dataStore = dataStore
+        self.healthKitManager = healthKitManager
     }
     
     // MARK: - Navigation
@@ -87,13 +89,43 @@ final class OnboardingViewModel {
         }
     }
     
-    // MARK: - HealthKit Permission
+    // MARK: - HealthKit Permission (REAL IMPLEMENTATION)
     
     func requestHealthKitPermission() async {
-        // TODO: Implement in Phase 3 with HealthKitManager
-        // For now, simulate permission request
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
-        healthKitAuthorized = true
+        print("🔵 Starting HealthKit permission request...")
+        
+        // Check if HealthKit is available
+        guard HealthKitPermissions.isHealthKitAvailable else {
+            print("❌ HealthKit is NOT available on this device")
+            await MainActor.run {
+                self.healthKitAuthorized = false
+            }
+            return
+        }
+        
+        print("✅ HealthKit is available")
+        
+        do {
+            print("🔵 Requesting authorization...")
+            let authorized = try await healthKitManager.requestAuthorization()
+            
+            print("✅ Authorization result: \(authorized)")
+            
+            await MainActor.run {
+                self.healthKitAuthorized = authorized
+            }
+            
+            if authorized {
+                print("✅ HealthKit authorized successfully")
+            } else {
+                print("⚠️ HealthKit not fully authorized")
+            }
+        } catch {
+            print("❌ HealthKit authorization error: \(error.localizedDescription)")
+            await MainActor.run {
+                self.healthKitAuthorized = false
+            }
+        }
     }
     
     func skipHealthKit() {
@@ -105,20 +137,58 @@ final class OnboardingViewModel {
     
     func performInitialSync() async {
         guard healthKitAuthorized else {
-            isInitialSyncComplete = true
+            await MainActor.run {
+                isInitialSyncComplete = true
+            }
             return
         }
         
-        // TODO: Implement in Phase 3 with HealthKitManager
-        // For now, simulate sync with progress
-        for progress in stride(from: 0.0, through: 1.0, by: 0.1) {
-            try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
-            await MainActor.run {
-                syncProgress = progress
-            }
+        // Start progress animation
+        await MainActor.run {
+            syncProgress = 0.0
         }
         
-        isInitialSyncComplete = true
+        // Perform actual HealthKit sync
+        do {
+            // Show progress while syncing
+            let syncTask = Task {
+                try await healthKitManager.performInitialSync()
+            }
+            
+            // Animate progress bar
+            while !syncTask.isCancelled && syncProgress < 0.95 {
+                try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 seconds
+                await MainActor.run {
+                    syncProgress += 0.1
+                }
+            }
+            
+            // Wait for sync to complete
+            try await syncTask.value
+            
+            // Complete to 100%
+            await MainActor.run {
+                syncProgress = 1.0
+            }
+            
+            // Small delay so user can see 100%
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+            
+            await MainActor.run {
+                isInitialSyncComplete = true
+            }
+            
+            print("✅ Initial sync complete at 100%")
+            
+        } catch {
+            print("❌ Sync error: \(error)")
+            
+            // Still complete to 100% even if error
+            await MainActor.run {
+                syncProgress = 1.0
+                isInitialSyncComplete = true
+            }
+        }
     }
     
     // MARK: - Complete Onboarding

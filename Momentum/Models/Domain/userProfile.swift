@@ -121,4 +121,10 @@ enum WorkoutType: String, Codable, CaseIterable {
     case swimming = "Swimming"
     case walking = "Walking"
     case sports = "Sports"
+    case stairClimber = "Stair Climber"
+    case soccer = "Soccer"
+    case pickleball = "Pickleball"
+    case basketball = "Basketball"
+    case tennis = "Tennis"
+    case volleyball = "Volleyball"
 }
